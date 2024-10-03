@@ -9,29 +9,77 @@ on:
       - main
 
 jobs:
-  build:
+  compile:
     runs-on: ubuntu-latest
-
+    name: Compile project
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Set up JDK 17
+      - name: Setup JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'corretto'
           java-version: '17'
+          distribution: 'corretto'
 
-      - name: Build with Maven
-        run: mvn clean install
+      - name: Running Unit Tests
+        run: ./mvnw clean compile
+  unit-tests:
+    runs-on: ubuntu-latest
+    name: Unit tests
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Log in to Docker Hub
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Running Unit Tests
+        run: ./mvnw clean test
+  build:
+    runs-on: ubuntu-latest
+    name: Build backend
+    needs: [compile, unit-tests]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Compile project
+        run: ./mvnw clean compile
+
+  build-image:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      - name: Build & Push Docker Image
+      - name: Build & Push to DockerHub
         uses: docker/build-push-action@v5
         with:
           file: Dockerfile
@@ -44,7 +92,7 @@ jobs:
   deploy:
     name: Deploy Backend
     runs-on: ubuntu-latest
-    needs: [ build ]
+    needs: [ build-image ]
 
     steps:
       - name: Install SSH pass for password authentication (if needed)
