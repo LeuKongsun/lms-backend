@@ -3,9 +3,9 @@ target/
 *.md
 *.iml
 .idea/
-# Ignore all files in the root directory
+# Ignore all files in the root directory except for specific ones
 *
-# Include the src directory
+# Include specific files and directories
 !src/
-# Include the pom.xml file
 !pom.xml
+!docker-compose.yml
