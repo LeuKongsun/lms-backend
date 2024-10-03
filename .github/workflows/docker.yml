@@ -24,6 +24,9 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
+      - name: Grant Execution Permission for Maven Wrapper
+        run: chmod +x ./mvnw
+
       - name: Running Unit Tests
         run: ./mvnw clean compile
   unit-tests:
@@ -40,6 +43,9 @@ jobs:
         with:
           java-version: '17'
           distribution: 'corretto'
+
+      - name: Grant Execution Permission for Maven Wrapper
+        run: chmod +x ./mvnw
 
       - name: Running Unit Tests
         run: ./mvnw clean test
@@ -58,6 +64,9 @@ jobs:
         with:
           java-version: '17'
           distribution: 'corretto'
+
+      - name: Grant Execution Permission for Maven Wrapper
+        run: chmod +x ./mvnw
 
       - name: Compile project
         run: ./mvnw clean compile
