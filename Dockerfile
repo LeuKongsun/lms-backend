@@ -14,6 +14,7 @@ COPY --from=build /build/target/leanring-management-system-*.jar /app/leanring-m
 
 #ENV DB_URL="jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?prepareThreshold=0"
 ENV ACTIVE_PROFILE=${PROFILE}
+ENV DB_URL=${DB_URL}
 
 # Run the application
 CMD java -jar -Dspring.profiles.active=${ACTIVE_PROFILE} -Dspring.datasource.url=${DB_URL} leanring-management-system.jar
