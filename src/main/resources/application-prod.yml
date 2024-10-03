@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://dpg-cq8tds5ds78s7395ku10-a:5432/db_lms
-    username: db_lms_user
-    password: PYPM9TZCexVmt04vysQlhTo3p2zbuY6N
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASS}
   jpa:
     hibernate:
       ddl-auto: update
