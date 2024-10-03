@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PROFILE: dev
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?prepareThreshold=0
+      DB_USER: postgres.gkhbcrbmrwquowfquzjc
+      DB_PASS: Lms@Kga@2024
+      ACTIVE_PROFILE: ${PROFILE:-dev}   # Use 'dev' profile if not provided
+

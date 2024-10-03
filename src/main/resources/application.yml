@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: learning_management_system
+  profiles:
+    active: dev
+
+server:
+  port: 8080

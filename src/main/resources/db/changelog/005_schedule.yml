@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005_schedule
+      author: sanratana18@gmail.com
+      changes:
+        - sqlFile:
+            path: db/data/005_schedule.sql

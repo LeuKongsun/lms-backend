@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 000_db_schema
+      author: sanratana18@gmail.com
+      changes:
+        - sqlFile:
+            path: db/data/000_db_schema.sql
