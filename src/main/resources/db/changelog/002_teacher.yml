@@ -1,7 +1,0 @@
-databaseChangeLog:
-  - changeSet:
-      id: 002_teacher
-      author: sanratana18@gmail.com
-      changes:
-        - sqlFile:
-            path: db/data/002_teacher.sql

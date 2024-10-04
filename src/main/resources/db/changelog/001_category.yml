@@ -1,7 +1,0 @@
-databaseChangeLog:
-  - changeSet:
-      id: 001_category
-      author: sanratana18@gmail.com
-      changes:
-        - sqlFile:
-            path: db/data/001_category.sql
