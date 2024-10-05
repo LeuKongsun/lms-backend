@@ -61,7 +61,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    @Cacheable
+    @CacheEvict(allEntries = true)
     public PageDTO getAll(Map<String,String> params) {
         Specification<Schedule> spec = Specification.where(null);
 
