@@ -1,6 +1,5 @@
 package com.kongsun.leanring.system.common;
 
-import com.kongsun.leanring.system.payment.Payment;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 
