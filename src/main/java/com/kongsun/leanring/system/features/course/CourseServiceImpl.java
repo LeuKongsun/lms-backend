@@ -64,7 +64,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @Cacheable
+    @CacheEvict(allEntries = true)
     public PageDTO getAll(Map<String,String> params) {
         Specification<Course> spec = Specification.where(null);
         if(params.containsKey("search")){

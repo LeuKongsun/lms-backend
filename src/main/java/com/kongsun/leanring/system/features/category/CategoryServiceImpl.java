@@ -50,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Cacheable
+    @CacheEvict(allEntries = true)
     public PageDTO getAll(Map<String, String> params) {
         Specification<Category> spec = Specification.where(null);
         if (params.containsKey("name")) {
