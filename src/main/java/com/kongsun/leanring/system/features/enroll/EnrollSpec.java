@@ -26,12 +26,10 @@ public class EnrollSpec {
     }
 
     public static Specification<Enroll> hasCourseName(String courseName) {
-        return (root, query, builder) -> {
-            if (courseName == null || courseName.isEmpty()) {
-                return builder.conjunction(); // No filtering if courseName is null or empty
-            }
-            Join<Enroll, Course> courseJoin = root.join("courses", JoinType.INNER);
-            return builder.like(builder.lower(courseJoin.get("name")), "%" + courseName.toLowerCase() + "%");
-        };
+        return (root, query, cb) ->
+                cb.like(cb.lower(root.get("course").get("name")), "%" + courseName.toLowerCase() + "%");
     }
+
+
+
 }

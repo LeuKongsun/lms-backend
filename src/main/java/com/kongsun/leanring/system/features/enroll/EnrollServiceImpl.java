@@ -92,6 +92,12 @@ public class EnrollServiceImpl implements EnrollService {
                 spec = spec.and(EnrollSpec.equalStatus(status));
             }
         }
+        if (params.containsKey("course")) {
+            String course = params.get("course");
+            if (course != null && !course.isEmpty()) {
+                spec = spec.and(EnrollSpec.hasCourseName(course));
+            }
+        }
         if (params.containsKey("all")) {
             return new PageDTO(enrollRepository.findAll());
         }
