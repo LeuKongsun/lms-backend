@@ -2,6 +2,7 @@ package com.kongsun.leanring.system.features.enroll;
 
 import com.kongsun.leanring.system.common.PageDTO;
 import com.kongsun.leanring.system.common.PaginationUtil;
+import com.kongsun.leanring.system.exception.ApiException;
 import com.kongsun.leanring.system.features.course.Course;
 import com.kongsun.leanring.system.exception.ResourceNotFoundException;
 import com.kongsun.leanring.system.features.payment.Payment;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -33,6 +35,12 @@ public class EnrollServiceImpl implements EnrollService {
 
     @Override
     public EnrollResponse create(EnrollRequest enrollRequest) {
+        // Check if student already enrolled
+        boolean alreadyEnrolled = enrollRepository.existsByStudentIdAndCourseId(enrollRequest.getStudentId(), enrollRequest.getCourseId());
+        if(alreadyEnrolled){
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Student already enrolled in this course");
+        }
+
         Enroll enroll = enrollMapper.toEnroll(enrollRequest);
         Course course = enroll.getCourse();
         BigDecimal discountPrice = course.priceAfterDiscount();
