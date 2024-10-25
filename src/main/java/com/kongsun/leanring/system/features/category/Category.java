@@ -1,9 +1,14 @@
 package com.kongsun.leanring.system.features.category;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kongsun.leanring.system.auditing.AuditingEntity;
+import com.kongsun.leanring.system.features.course.Course;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,4 +33,12 @@ public class Category extends AuditingEntity {
     )
     private String description;
 
+
+    @OneToMany(
+            mappedBy = "category",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonIgnore
+    private List<Course> courses;
 }
