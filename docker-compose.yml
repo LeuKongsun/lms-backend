@@ -10,5 +10,5 @@ services:
       DB_URL: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?prepareThreshold=0
       DB_USER: postgres.gkhbcrbmrwquowfquzjc
       DB_PASS: Lms@Kga@2024
-      ACTIVE_PROFILE: ${PROFILE:-dev}   # Use 'dev' profile if not provided
+      ACTIVE_PROFILE: ${PROFILE:-prod}   # Use 'dev' profile if not provided
 
