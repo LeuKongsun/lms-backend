@@ -35,4 +35,7 @@ public class AttendanceDetail extends AuditingEntity {
 
     @Column(name = "att_date")
     private LocalDate date;
+
+    @Column(name = "reason")
+    private String reason;
 }

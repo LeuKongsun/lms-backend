@@ -31,6 +31,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendanceRepository.save(attendance);
 
         Map<AttendanceStatus, List<Long>> map = attendanceRequest.getAttendance();
+        Map<Long, String> reasons = attendanceRequest.getReasons();
         List<AttendanceDetail> attendanceDetails = map.entrySet().stream()
                 .flatMap(entry -> {
                     AttendanceStatus status = entry.getKey();
@@ -42,6 +43,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                                     .status(status)
                                     .student(stu)
                                     .date(attendanceRequest.getDate())
+                                    .reason(reasons != null ? reasons.get(stu.getId()): null)
                                     .build()
                     );
                 })
