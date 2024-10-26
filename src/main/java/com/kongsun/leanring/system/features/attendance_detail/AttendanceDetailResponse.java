@@ -13,5 +13,6 @@ public class AttendanceDetailResponse {
     private Long id;
     private StudentResponse student;
     private AttendanceStatus status;
+    private String reason;
     private LocalDate date;
 }

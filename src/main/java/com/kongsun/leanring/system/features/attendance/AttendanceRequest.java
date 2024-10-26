@@ -12,4 +12,5 @@ public class AttendanceRequest {
     private Long courseId;
     private LocalDate date;
     private Map<AttendanceStatus, List<Long>> attendance;
+    private Map<Long, String> reasons;
 }
