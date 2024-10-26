@@ -35,7 +35,7 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
         }
 
         Pageable pageable = PaginationUtil.getPageNumberAndPageSize(params);
-        Page<AttendanceDetail> detailPage = attendanceDetailRepository.findAll(spec, pageable);
+         Page<AttendanceDetail> detailPage = attendanceDetailRepository.findAll(spec, pageable);
         List<AttendanceDetailResponse> detailResponse = detailPage.stream()
                 .map(attendanceDetailMapper::toAttendanceDetailResponse)
                 .toList();
