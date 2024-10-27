@@ -9,4 +9,6 @@ public interface AttendanceService {
     List<?> getAll(Map<String ,String> params);
 
     AttendanceResponse getById(Long id);
+
+    boolean markStudentAttendance(MarkStudentAttendanceRequest attendanceRequest);
 }

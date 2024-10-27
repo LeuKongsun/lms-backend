@@ -59,6 +59,19 @@ public class StudentController {
                 );
     }
 
+    @GetMapping("/code/{code}")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<ApiResponse> getByCode(@PathVariable String code) {
+        Student student = studentService.getStudentByCode(code);
+        return ResponseEntity
+                .ok(ApiResponse.builder()
+                        .data(studentMapper.toStudentResponse(student))
+                        .message("get student successfully")
+                        .httpStatus(OK.value())
+                        .build()
+                );
+    }
+
     @PutMapping("{id}")
     public ResponseEntity<ApiResponse> update(@PathVariable Long id, @RequestBody @Valid StudentRequest request) {
         Student student = studentMapper.toStudent(request);

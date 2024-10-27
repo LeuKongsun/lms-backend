@@ -18,6 +18,13 @@ public class Student extends AuditingEntity {
     private Long id;
 
     @Column(
+            name = "stu_code",
+            nullable = false,
+            length = 15
+    )
+    private String code;
+
+    @Column(
             name = "stu_firstname",
             nullable = false,
             length = 50

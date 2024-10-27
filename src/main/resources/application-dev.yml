@@ -11,3 +11,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+
+qr:
+  frontend-url: https://c176-103-120-134-199.ngrok-free.app

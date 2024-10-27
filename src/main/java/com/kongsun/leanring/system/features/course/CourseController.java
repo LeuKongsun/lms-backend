@@ -37,6 +37,7 @@ public class CourseController {
     private final EnrollService enrollService;
 
     @GetMapping
+    @PreAuthorize("permitAll()")
     public ResponseEntity<PageDTO> getAll(@RequestParam Map<String, String> params) {
         return ResponseEntity
                 .ok(courseService.getAll(params));

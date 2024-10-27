@@ -18,6 +18,11 @@ public class StudentSpec {
                 criteriaBuilder.like(root.get("phone"), "%" + phone + "%");
     }
 
+    public static Specification<Student> containCode(String code) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.like(criteriaBuilder.lower(root.get("code")), "%" + code.toLowerCase() + "%");
+    }
+
     public static Specification<Student> hasPhone(String phone) {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("phone"), phone);

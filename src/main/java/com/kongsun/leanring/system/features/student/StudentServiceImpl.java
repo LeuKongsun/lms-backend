@@ -4,6 +4,7 @@ import com.kongsun.leanring.system.common.PageDTO;
 import com.kongsun.leanring.system.common.PaginationUtil;
 import com.kongsun.leanring.system.exception.ApiException;
 import com.kongsun.leanring.system.exception.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -39,6 +40,8 @@ public class StudentServiceImpl implements StudentService {
             }
         }
 
+        String generatedCode = generateStudentCode();
+        student.setCode(generatedCode);
         return studentRepository.save(student);
     }
 
@@ -47,6 +50,12 @@ public class StudentServiceImpl implements StudentService {
     public Student getById(Long id) {
         return studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student", id));
+    }
+
+    @Override
+    public Student getStudentByCode(String code) {
+        return studentRepository.findByCode(code)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Student not found"));
     }
 
     @Override
@@ -94,7 +103,8 @@ public class StudentServiceImpl implements StudentService {
             spec = spec.and(StudentSpec.containLastname(params.get("search")))
                     .or(StudentSpec.containFirstname(params.get("search")))
                     .or(StudentSpec.containPhone(params.get("search")))
-                    .or(StudentSpec.containEmail(params.get("search")));
+                    .or(StudentSpec.containEmail(params.get("search")))
+                    .or(StudentSpec.containCode(params.get("search")));
         }
         if(params.containsKey("gender")){
             spec = spec.and(StudentSpec.containGender(params.get("gender")));
@@ -121,6 +131,23 @@ public class StudentServiceImpl implements StudentService {
     @Cacheable(key = "#studentIds")
     public List<Student> getByIds(List<Long> studentIds) {
         return studentRepository.findAllById(studentIds);
+    }
+
+    @Transactional
+    public String generateStudentCode(){
+        String latestCode = studentRepository.findLatestStudentCode();
+
+        if(latestCode == null){
+            return "KGAS0001";
+        }
+
+        String prefix = "KGAS";
+        int codeNumber = Integer.parseInt(latestCode.substring(4));
+        codeNumber++;
+
+        // Format the new code with leading zeros
+        return String.format("%s%04d", prefix, codeNumber);
+
     }
 
 }

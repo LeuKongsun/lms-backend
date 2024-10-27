@@ -50,4 +50,18 @@ public class AttendanceController {
 
     }
 
+    @PreAuthorize("permitAll()")
+    @PostMapping("/submitAttendance")
+    public ResponseEntity<ApiResponse> submitAttendance(@RequestBody @Valid MarkStudentAttendanceRequest request) {
+        return ResponseEntity
+                .status(CREATED)
+                .body(ApiResponse.builder()
+                        .data(attendanceService.markStudentAttendance(request))
+                        .message("create attendance successfully")
+                        .httpStatus(CREATED.value())
+                        .build()
+                );
+
+    }
+
 }

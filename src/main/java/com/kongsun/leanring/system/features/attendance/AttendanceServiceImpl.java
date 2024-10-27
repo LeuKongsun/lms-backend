@@ -1,19 +1,27 @@
 package com.kongsun.leanring.system.features.attendance;
 
+import com.kongsun.leanring.system.exception.ApiException;
+import com.kongsun.leanring.system.exception.ResourceNotFoundException;
 import com.kongsun.leanring.system.features.attendance_detail.AttendanceDetail;
 import com.kongsun.leanring.system.features.attendance_detail.AttendanceDetailMapper;
 import com.kongsun.leanring.system.features.attendance_detail.AttendanceDetailRepository;
 import com.kongsun.leanring.system.features.attendance_detail.AttendanceDetailResponse;
+import com.kongsun.leanring.system.features.course.Course;
+import com.kongsun.leanring.system.features.course.CourseRepository;
+import com.kongsun.leanring.system.features.course.CourseService;
 import com.kongsun.leanring.system.features.student.Student;
+import com.kongsun.leanring.system.features.student.StudentRepository;
 import com.kongsun.leanring.system.features.student.StudentService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +32,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final StudentService studentService;
     private final AttendanceMapper attendanceMapper;
     private final AttendanceDetailMapper attendanceDetailMapper;
+
+    private final StudentRepository studentRepository;
+    private final CourseService courseService;
 
     @Override
     public AttendanceResponse create(AttendanceRequest attendanceRequest) {
@@ -113,6 +124,8 @@ public class AttendanceServiceImpl implements AttendanceService {
         return null;
     }
 
+
+
 //    private AttendanceResponse getAttendanceResponse(Attendance att, List<AttendanceDetail> attDetail) {
 //        Map<AttendanceStatus, List<Long>> attendanceMap = attDetail.stream()
 //                .collect(
@@ -128,4 +141,38 @@ public class AttendanceServiceImpl implements AttendanceService {
 //        attResponse.setAttendance(attendanceMap);
 //        return attResponse;
 //    }
+
+    @Override
+    public boolean markStudentAttendance(MarkStudentAttendanceRequest attendanceRequest) {
+        // Find student code
+        System.out.println(attendanceRequest);
+        Optional<Student> student = studentRepository.findByCode(attendanceRequest.getStudentCode());
+        if(student.isEmpty()){
+            throw new ApiException(HttpStatus.NOT_FOUND, "Student not found");
+        }
+        Course course = courseService.getById(attendanceRequest.getCourseId());
+
+        if(course == null){
+            throw new ApiException(HttpStatus.NOT_FOUND, "Course not found");
+        }
+        Attendance attendance = attendanceRepository.findByCourseIdAndDate(attendanceRequest.getCourseId(), attendanceRequest.getDate());
+        if(attendance == null){
+            // Create new attendance if not exists
+            attendance = new Attendance();
+            attendance.setCourse(course);
+            attendance.setDate(attendance.getDate());
+            attendanceRepository.save(attendance);
+        }
+
+        AttendanceDetail attendanceDetail = AttendanceDetail.builder()
+                .attendance(attendance)
+                .status(AttendanceStatus.PRESENT)
+                .student(student.get())
+                .date(attendanceRequest.getDate())
+                .reason(null)
+                .build();
+
+        attendanceDetailRepository.save(attendanceDetail);
+        return true;
+    }
 }

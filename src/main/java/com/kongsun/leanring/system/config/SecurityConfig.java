@@ -24,6 +24,10 @@ public class SecurityConfig {
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
     private static final String[] WHITE_LIST_URL = {
             "/api/v1/auth/**",
+            "/api/v1/qr/**",
+            "/api/v1/courses/**",
+            "/api/v1/students/**",
+            "/api/v1/attendances/submitAttendance/**",
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",

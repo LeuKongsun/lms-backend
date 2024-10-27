@@ -33,6 +33,7 @@ create table teachers
 create table students
 (
     stu_id  bigserial   primary KEY,
+    stu_code varchar(15),
     stu_firstname varchar(10),
     stu_lastname varchar(20),
     stu_gender varchar(20),
