@@ -13,4 +13,4 @@ spring:
         format_sql: true
 
 qr:
-  frontend-url: https://c176-103-120-134-199.ngrok-free.app
+  frontend-url: http://192.168.100.95:3000

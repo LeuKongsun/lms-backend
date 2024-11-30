@@ -14,7 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -41,28 +44,30 @@ public class QrCodeController {
         return new ResponseEntity<>(MatrixToImageWriter.toBufferedImage(bitMatrix), HttpStatus.OK);
     }
 
+    @PostMapping(value = "/generateQR", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> generateQRCode(@RequestBody Map<String, String> requestData) throws WriterException, IOException {
+        String courseId = requestData.get("courseId");
+        String date = requestData.get("date");
+
+
+
+        String qrContent = frontendUrl + "/qr?courseId="+ courseId + "&date="+date;
+
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, 200, 200);
+        BufferedImage qrImage  = MatrixToImageWriter.toBufferedImage(bitMatrix);
+
+        // Convert BufferedImage to byte[]
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(qrImage, "PNG", outputStream);
+        byte[] imageBytes = outputStream.toByteArray();
+
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_PNG).body(imageBytes);
+    }
+
     @GetMapping("testing")
     public ResponseEntity<?> getTesting() {
         return ResponseEntity.ok("testing");
-    }
-
-    @PostMapping("/submitAttendance")
-    public ResponseEntity<ApiResponse> submitAttendance(@RequestBody SubmitAttendanceRequest submitAttendanceRequest) {
-        // Logic to mark attendance in the database
-//        boolean success = attendanceService.markAttendance(classId, studentId);
-
-        System.out.println(submitAttendanceRequest);
-        // handle update attendance status
-        boolean success = true;
-
-        return ResponseEntity
-                .status(CREATED)
-                .body(ApiResponse.builder()
-                        .data(null)
-                        .message("create attendance successful")
-                        .httpStatus(CREATED.value())
-                        .build()
-                );
     }
 
 }
